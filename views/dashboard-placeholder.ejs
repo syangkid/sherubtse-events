@@ -1,0 +1,21 @@
+<%- include('partials/header', { title: locals.title || 'Dashboard' }) %>
+
+<section class="dashboard-section">
+  <h1 class="dashboard-title"><%= locals.title || 'Dashboard' %></h1>
+  <p><strong>Temporary page.</strong> The real dashboard is built in a later phase. This page only proves that login and role checks work.</p>
+
+  <% if (locals.currentUser) { %>
+    <ul>
+      <li>Name: <%= currentUser.fullName %></li>
+      <li>Email: <%= currentUser.email %></li>
+      <li>System role: <strong><%= roleLabel(currentUser.role) %></strong></li>
+      <li>Event Admin for at least one event: <strong><%= currentUser.isEventAdmin ? 'Yes' : 'No' %></strong></li>
+    </ul>
+
+    <% if (currentUser.role === 'student') { %>
+      <p><a class="btn btn--outline" href="/student/organizer-request">Request Organizer Role</a></p>
+    <% } %>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,52 @@
+<%
+  // Which menu to show depends on who is logged in.
+  const user = locals.currentUser;
+  const role = user ? user.role : null;
+  const path = locals.currentPath || '/';
+  const active = (p) => (path === p ? 'is-active' : '');
+%>
+<nav class="main-nav" aria-label="Main navigation">
+  <div class="container main-nav__inner">
+    <ul class="main-nav__list">
+
+      <% if (!user) { %>
+        <li><a class="<%= active('/') %>" href="/">Home</a></li>
+        <li><a class="<%= active('/events') %>" href="/events">Events</a></li>
+        <li><a class="<%= active('/login') %>" href="/login">Login</a></li>
+        <li><a class="<%= active('/signup') %>" href="/signup">Register</a></li>
+
+      <% } else if (role === 'super_admin') { %>
+        <li><a href="/superadmin/dashboard">Dashboard</a></li>
+        <li><a href="/superadmin/users">Users</a></li>
+        <li><a href="/superadmin/organizer-requests">Organizer Requests</a></li>
+        <li><a href="/superadmin/events">Events</a></li>
+        <li><a href="/superadmin/venues">Venues</a></li>
+        <li><a href="/superadmin/event-admin-assignments">Event Admin Assignments</a></li>
+        <%- include('nav-notifications') %>
+        <li><a href="/logout">Logout</a></li>
+
+      <% } else if (role === 'organizer') { %>
+        <li><a href="/organizer/dashboard">Dashboard</a></li>
+        <li><a href="/organizer/my-events">My Events</a></li>
+        <li><a href="/organizer/create-event">Create Event</a></li>
+        <% if (user.isEventAdmin) { %>
+          <li><a href="/event-admin/dashboard">Assigned Events</a></li>
+        <% } %>
+        <%- include('nav-notifications') %>
+        <li><a href="/logout">Logout</a></li>
+
+      <% } else { %>
+        <li><a href="/">Home</a></li>
+        <li><a href="/events">Events</a></li>
+        <li><a href="/student/my-registrations">My Registrations</a></li>
+        <% if (user.isEventAdmin) { %>
+          <li><a href="/event-admin/dashboard">Assigned Events</a></li>
+        <% } %>
+        <li><a href="/student/profile">Profile</a></li>
+        <%- include('nav-notifications') %>
+        <li><a href="/logout">Logout</a></li>
+      <% } %>
+
+    </ul>
+  </div>
+</nav>

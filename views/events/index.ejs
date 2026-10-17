@@ -1,0 +1,56 @@
+<%- include('../partials/header', { title: 'Events' }) %>
+
+<h1 class="dashboard-title">Events</h1>
+
+<form class="filter-bar" method="GET" action="/events">
+  <div class="form-group">
+    <label for="search">Search events</label>
+    <input class="form-control" type="text" id="search" name="search"
+           value="<%= filters.search %>" placeholder="Title or keyword">
+  </div>
+  <input type="hidden" name="when" value="<%= filters.when %>">
+  <button type="submit" class="btn btn--primary">Search</button>
+  <a class="btn btn--outline" href="/events?when=<%= filters.when %>">Clear</a>
+</form>
+
+<nav class="tab-list" aria-label="Filter events by time">
+  <% [['upcoming', 'Upcoming'], ['past', 'Past'], ['all', 'All']].forEach((t) => { %>
+    <a class="<%= filters.when === t[0] ? 'is-active' : '' %>"
+       href="/events?when=<%= t[0] %>&search=<%= encodeURIComponent(filters.search) %>"><%= t[1] %></a>
+  <% }) %>
+</nav>
+
+<% if (events.length === 0) { %>
+  <p class="empty-state">No events found.</p>
+<% } else { %>
+  <section class="card-grid" aria-label="Event list">
+    <% events.forEach((e) => {
+         const seatsLeft = Math.max(e.capacity - e.registeredCount, 0);
+    %>
+      <article class="card event-card">
+        <h2 class="card__title"><a href="/events/<%= e.id %>"><%= e.title %></a></h2>
+        <p class="event-meta">
+          <%= formatDate(e.eventDate) %> &middot; <%= e.venueName || 'Venue to be announced' %>
+        </p>
+        <p><%= (e.description || '').slice(0, 140) %><%= (e.description || '').length > 140 ? '...' : '' %></p>
+
+        <p>
+          <% if (e.status !== 'published') { %>
+            <span class="badge badge--<%= e.status %>"><%= e.status %></span>
+          <% } else if (seatsLeft === 0) { %>
+            <span class="badge badge--full">Full</span>
+          <% } else { %>
+            <span class="form-hint"><%= seatsLeft %> seat(s) left</span>
+          <% } %>
+          <% if (e.myRegistrationStatus === 'registered') { %>
+            <span class="badge badge--registered">You are registered</span>
+          <% } %>
+        </p>
+
+        <a class="btn btn--small btn--outline" href="/events/<%= e.id %>">View details</a>
+      </article>
+    <% }) %>
+  </section>
+<% } %>
+
+<%- include('../partials/footer') %>

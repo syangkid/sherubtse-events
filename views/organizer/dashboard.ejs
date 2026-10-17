@@ -1,0 +1,57 @@
+<%- include('../partials/header', { title: 'Organizer Dashboard' }) %>
+
+<h1 class="dashboard-title">Organizer Dashboard</h1>
+
+<section class="stat-grid" aria-label="Your statistics">
+  <div class="stat-card">
+    <p class="stat-card__label">My Events</p>
+    <p class="stat-card__value"><%= stats.myEvents %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Upcoming Events</p>
+    <p class="stat-card__value"><%= stats.upcomingEvents %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Total Participants</p>
+    <p class="stat-card__value"><%= stats.totalParticipants %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Attendance (present)</p>
+    <p class="stat-card__value"><%= stats.attended %></p>
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h2>Your recent events</h2>
+  <% if (recentEvents.length === 0) { %>
+    <p class="empty-state">You have not created any events yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Title</th><th>Date</th><th>Status</th><th>Registered</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <% recentEvents.forEach((e) => { %>
+            <tr>
+              <td><%= e.title %></td>
+              <td><%= formatDate(e.eventDate) %></td>
+              <td><span class="badge badge--<%= e.status %>"><%= e.status %></span></td>
+              <td><%= e.registeredCount %> / <%= e.capacity %></td>
+                <td>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= e.id %>/edit">Edit</a>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= e.id %>/participants">Participants</a>
+  </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+  <p>
+    <a class="btn btn--primary" href="/organizer/create-event">Create event</a>
+    <a class="btn btn--outline" href="/organizer/my-events">All my events</a>
+  </p>
+</section>
+
+<%- include('../partials/footer') %>

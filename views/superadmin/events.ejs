@@ -1,0 +1,40 @@
+<%- include('../partials/header', { title: 'All Events' }) %>
+
+<h1 class="dashboard-title">All Events</h1>
+
+<section class="dashboard-section">
+  <p class="form-hint"><%= events.length %> event(s) in the system. As Super Admin you can manage any of them.</p>
+
+  <% if (events.length === 0) { %>
+    <p class="empty-state">No events yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th><th>Date</th><th>Organizer</th><th>Venue</th>
+            <th>Status</th><th>Registered</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% events.forEach((e) => { %>
+            <tr>
+              <td><%= e.title %></td>
+              <td><%= formatDate(e.eventDate) %></td>
+              <td><%= e.organizerName %></td>
+              <td><%= e.venueName || '-' %></td>
+              <td><span class="badge badge--<%= e.status %>"><%= e.status %></span></td>
+              <td><%= e.registeredCount %> / <%= e.capacity %></td>
+                <td>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= e.id %>/edit">Manage</a>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= e.id %>/participants">Participants</a>
+  </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

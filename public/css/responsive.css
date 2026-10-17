@@ -1,0 +1,41 @@
+@media (max-width: 768px) {
+  .brand__name {
+    font-size: 1.3rem;
+  }
+
+  .brand__subtitle {
+    font-size: 0.8rem;
+  }
+
+  .main-nav__list {
+    flex-direction: column;
+  }
+
+  .main-nav__list a {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .hero {
+    padding: var(--space-3) var(--space-2);
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .site-footer__inner {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand__logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}

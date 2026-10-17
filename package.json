@@ -1,0 +1,33 @@
+{
+  "name": "sherubtse-events",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+  "start": "node app.js",
+  "dev": "nodemon app.js",
+  "db:test": "node database/testConnection.js",
+  "db:schema": "node database/run.js schema",
+  "db:seed": "node database/run.js seed",
+  "db:reset": "npm run db:schema && npm run db:seed",
+  "postman:build": "node tests/generatePostman.js"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^18.0.5",
+    "ejs": "^7.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "nodemailer": "^10.0.15",
+    "pg": "^8.23.1",
+    "pg-promise": "^12.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

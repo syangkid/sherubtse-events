@@ -1,0 +1,58 @@
+<%- include('../partials/header', { title: 'Users' }) %>
+
+<h1 class="dashboard-title">Users</h1>
+
+<form class="filter-bar" method="GET" action="/superadmin/users">
+  <div class="form-group">
+    <label for="search">Search</label>
+    <input class="form-control" type="text" id="search" name="search"
+           value="<%= filters.search %>" placeholder="Name, email or student ID">
+  </div>
+  <div class="form-group">
+    <label for="role">Role</label>
+    <select class="form-control" id="role" name="role">
+      <option value="">All roles</option>
+      <% ['super_admin', 'organizer', 'student'].forEach((r) => { %>
+        <option value="<%= r %>" <%= filters.role === r ? 'selected' : '' %>><%= roleLabel(r) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <button type="submit" class="btn btn--primary">Filter</button>
+  <a class="btn btn--outline" href="/superadmin/users">Reset</a>
+</form>
+
+<section class="dashboard-section">
+  <p class="form-hint">
+    <%= users.length %> user(s) shown. Roles change only through the organizer request workflow.
+    Event Admin is an assignment for specific events, not a role.
+  </p>
+
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Email</th><th>Student ID</th>
+          <th>Role</th><th>Event Admin for</th><th>Joined</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users.length === 0) { %>
+          <tr><td colspan="7" class="empty-state">No users match your filters.</td></tr>
+        <% } %>
+        <% users.forEach((u) => { %>
+          <tr>
+            <td><%= u.id %></td>
+            <td><%= u.fullName %></td>
+            <td><%= u.email %></td>
+            <td><%= u.studentIdNo || '-' %></td>
+            <td><span class="badge badge--role"><%= roleLabel(u.role) %></span></td>
+            <td><%= u.assignedEventCount > 0 ? u.assignedEventCount + ' event(s)' : '-' %></td>
+            <td><%= formatDate(u.createdAt) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

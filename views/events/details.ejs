@@ -1,0 +1,85 @@
+<%- include('../partials/header', { title: event.title }) %>
+
+<p class="page-actions"><a href="/events">&larr; All events</a></p>
+
+<h1 class="dashboard-title"><%= event.title %></h1>
+<p>
+  <span class="badge badge--<%= event.status %>"><%= event.status %></span>
+    <% if (canManageEvent) { %>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= event.id %>/edit">Manage this event</a>
+  <% } %>
+  <% if (canOperate) { %>
+    <a class="btn btn--small btn--primary" href="/manage/events/<%= event.id %>/participants">Participants &amp; attendance</a>
+  <% } %>
+</p>
+
+<section class="dashboard-section">
+  <h2>About this event</h2>
+  <p class="description-text"><%= event.description || 'No description provided.' %></p>
+
+  <dl class="detail-list">
+    <dt>Date</dt>
+    <dd><%= formatDate(event.eventDate) %></dd>
+    <dt>Venue</dt>
+    <dd><%= event.venueName || 'To be announced' %></dd>
+    <dt>Organizer</dt>
+    <dd><%= event.organizerName %></dd>
+    <dt>Seats</dt>
+    <dd><%= event.registeredCount %> registered of <%= event.capacity %> (<%= registration.seatsLeft %> left)</dd>
+  </dl>
+</section>
+
+<section class="dashboard-section">
+  <h2>Registration</h2>
+
+  <% if (registration.state === 'login') { %>
+    <p><%= registration.message %></p>
+    <a class="btn btn--primary" href="/login">Login to register</a>
+
+  <% } else if (registration.state === 'registered') { %>
+    <p><span class="badge badge--registered">You are registered</span></p>
+    <% if (registration.canCancel) { %>
+      <form method="POST" action="/events/<%= event.id %>/cancel"
+            onsubmit="return confirm('Cancel your registration for this event?');">
+        <button type="submit" class="btn btn--danger">Cancel registration</button>
+      </form>
+    <% } else { %>
+      <p class="form-hint">This registration can no longer be cancelled.</p>
+    <% } %>
+
+  <% } else if (registration.state === 'open') { %>
+    <p><%= registration.message %></p>
+    <form method="POST" action="/events/<%= event.id %>/register">
+      <button type="submit" class="btn btn--primary">Register for this event</button>
+    </form>
+
+  <% } else { %>
+    <p class="form-hint"><%= registration.message %></p>
+  <% } %>
+</section>
+
+<section class="dashboard-section">
+  <h2>Schedule</h2>
+  <% if (schedules.length === 0) { %>
+    <p class="empty-state">The schedule has not been published yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Start</th><th>End</th><th>Activity</th></tr>
+        </thead>
+        <tbody>
+          <% schedules.forEach((s) => { %>
+            <tr>
+              <td><%= formatTime(s.startTime) %></td>
+              <td><%= formatTime(s.endTime) %></td>
+              <td><%= s.description %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

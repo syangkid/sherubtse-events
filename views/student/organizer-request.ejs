@@ -1,0 +1,40 @@
+<%- include('../partials/header', { title: 'Request Organizer Role' }) %>
+<%
+  const errors = locals.errors || {};
+  const old = locals.old || {};
+  const hasPending = latest && latest.status === 'pending';
+%>
+
+<section class="auth-card">
+  <h1>Request the Organizer role</h1>
+  <p class="form-hint">
+    Organizers can create and manage events. A Super Admin reviews every request.
+  </p>
+
+  <% if (latest) { %>
+    <p>
+      Your latest request:
+      <span class="badge badge--<%= latest.status %>"><%= latest.status %></span>
+      (submitted <%= formatDate(latest.createdAt) %>)
+    </p>
+    <% if (latest.status === 'rejected') { %>
+      <p class="form-hint">Your last request was rejected. You may submit a new one.</p>
+    <% } %>
+  <% } %>
+
+  <% if (hasPending) { %>
+    <p>You have a request waiting for review. You cannot submit another until it is reviewed.</p>
+  <% } else { %>
+    <form method="POST" action="/student/organizer-request" novalidate>
+      <div class="form-group">
+        <label for="reason">Why do you want to be an Organizer?</label>
+        <textarea class="form-control" id="reason" name="reason" rows="5"
+                  maxlength="500" required><%= old.reason || '' %></textarea>
+        <% if (errors.reason) { %><p class="field-error"><%= errors.reason.msg %></p><% } %>
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">Submit request</button>
+    </form>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

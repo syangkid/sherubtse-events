@@ -1,0 +1,60 @@
+<%- include('partials/header', { title: 'Register' }) %>
+<%
+  const errors = locals.errors || {};
+  const old = locals.old || {};
+%>
+
+<section class="auth-card">
+  <h1>Create an account</h1>
+
+  <form method="POST" action="/signup" novalidate>
+    <div class="form-group">
+      <label for="full_name">Full name</label>
+      <input class="form-control" type="text" id="full_name" name="full_name"
+             value="<%= old.full_name || '' %>" autocomplete="name" required>
+      <% if (errors.full_name) { %><p class="field-error"><%= errors.full_name.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input class="form-control" type="email" id="email" name="email"
+             value="<%= old.email || '' %>" autocomplete="email" required>
+      <% if (errors.email) { %><p class="field-error"><%= errors.email.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="student_id_no">Student ID</label>
+      <input class="form-control" type="text" id="student_id_no" name="student_id_no"
+             value="<%= old.student_id_no || '' %>">
+      <% if (errors.student_id_no) { %><p class="field-error"><%= errors.student_id_no.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone (optional)</label>
+      <input class="form-control" type="tel" id="phone" name="phone"
+             value="<%= old.phone || '' %>" autocomplete="tel">
+      <% if (errors.phone) { %><p class="field-error"><%= errors.phone.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input class="form-control" type="password" id="password" name="password"
+             autocomplete="new-password" required>
+      <p class="form-hint">At least 8 characters, with a letter and a number.</p>
+      <% if (errors.password) { %><p class="field-error"><%= errors.password.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="confirm_password">Confirm password</label>
+      <input class="form-control" type="password" id="confirm_password" name="confirm_password"
+             autocomplete="new-password" required>
+      <% if (errors.confirm_password) { %><p class="field-error"><%= errors.confirm_password.msg %></p><% } %>
+    </div>
+
+    <button type="submit" class="btn btn--primary btn--block">Register</button>
+  </form>
+
+  <p class="auth-card__alt">Already have an account? <a href="/login">Login</a></p>
+</section>
+
+<%- include('partials/footer') %>

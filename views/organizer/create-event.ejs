@@ -1,0 +1,17 @@
+<%- include('../partials/header', { title: 'Create Event' }) %>
+
+<h1 class="dashboard-title">Create an event</h1>
+
+<section class="dashboard-section">
+  <p class="form-hint">After saving, you can add the schedule on the next page.</p>
+  <%- include('../partials/event-form', {
+        action: '/organizer/create-event',
+        values: values,
+        errors: errors,
+        venues: venues,
+        statuses: statuses,
+        submitLabel: 'Create event'
+      }) %>
+</section>
+
+<%- include('../partials/footer') %>

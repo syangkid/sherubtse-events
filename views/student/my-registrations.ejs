@@ -1,0 +1,51 @@
+<%- include('../partials/header', { title: 'My Registrations' }) %>
+
+<h1 class="dashboard-title">My Registrations</h1>
+
+<section class="dashboard-section">
+  <% if (registrations.length === 0) { %>
+    <p class="empty-state">You have not registered for any events yet.</p>
+    <p><a class="btn btn--primary" href="/events">Browse events</a></p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Event</th><th>Date</th><th>Venue</th>
+            <th>Registration</th><th>Attendance</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% registrations.forEach((r) => { %>
+            <tr>
+              <td><a href="/events/<%= r.eventId %>"><%= r.eventTitle %></a></td>
+              <td><%= formatDate(r.eventDate) %></td>
+              <td><%= r.venueName || '-' %></td>
+              <td><span class="badge badge--<%= r.status %>"><%= r.status %></span></td>
+              <td>
+                <% if (r.attendanceStatus) { %>
+                  <span class="badge badge--<%= r.attendanceStatus %>"><%= r.attendanceStatus %></span>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+              <td>
+                <% if (r.canCancel) { %>
+                  <form class="inline-form" method="POST" action="/events/<%= r.eventId %>/cancel"
+                        onsubmit="return confirm('Cancel this registration?');">
+                    <input type="hidden" name="return_to" value="my-registrations">
+                    <button type="submit" class="btn btn--small btn--danger">Cancel</button>
+                  </form>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,94 @@
+<%- include('../partials/header', { title: 'Participants' }) %>
+<%
+  const backPath = canManageEvent ? '/manage/events/' + event.id + '/edit' : '/event-admin/dashboard';
+  const backLabel = canManageEvent ? 'Back to event settings' : 'Back to assigned events';
+%>
+
+<p class="page-actions"><a href="<%= backPath %>">&larr; <%= backLabel %></a></p>
+
+<h1 class="dashboard-title">Participants: <%= event.title %></h1>
+<p class="form-hint">
+  <%= formatDate(event.eventDate) %> |
+  <%= event.venueName || 'Venue to be announced' %> |
+  <span class="badge badge--<%= event.status %>"><%= event.status %></span>
+</p>
+
+<section class="stat-grid" aria-label="Attendance summary">
+  <div class="stat-card">
+    <p class="stat-card__label">Registered</p>
+    <p class="stat-card__value"><%= summary.registered %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Present</p>
+    <p class="stat-card__value"><%= summary.present %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Absent</p>
+    <p class="stat-card__value"><%= summary.absent %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Not marked</p>
+    <p class="stat-card__value"><%= summary.notMarked %></p>
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h2>Attendance sheet</h2>
+
+  <% if (!attendanceOpen) { %>
+    <div class="alert alert--info" role="status"><%= attendanceMessage %></div>
+  <% } %>
+
+  <% if (participants.length === 0) { %>
+    <p class="empty-state">Nobody has registered for this event yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Student ID</th><th>Contact</th>
+            <th>Registration</th><th>Attendance</th><th>Mark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% participants.forEach((p) => { %>
+            <tr>
+              <td><%= p.fullName %></td>
+              <td><%= p.studentIdNo || '-' %></td>
+              <td><%= p.email %><br><span class="form-hint"><%= p.phone || '' %></span></td>
+              <td><span class="badge badge--<%= p.status %>"><%= p.status %></span></td>
+              <td>
+                <% if (p.status !== 'registered') { %>
+                  -
+                <% } else if (p.attendanceStatus) { %>
+                  <span class="badge badge--<%= p.attendanceStatus %>"><%= p.attendanceStatus %></span>
+                  <% if (p.markedByName) { %>
+                    <br><span class="form-hint">by <%= p.markedByName %></span>
+                  <% } %>
+                <% } else { %>
+                  <span class="badge badge--unmarked">not marked</span>
+                <% } %>
+              </td>
+              <td>
+                <% if (attendanceOpen && p.status === 'registered') { %>
+                  <form class="inline-form" method="POST"
+                        action="/manage/events/<%= event.id %>/attendance">
+                    <input type="hidden" name="registration_id" value="<%= p.registrationId %>">
+                    <button type="submit" name="status" value="present"
+                            class="btn btn--small btn--success">Present</button>
+                    <button type="submit" name="status" value="absent"
+                            class="btn btn--small btn--danger">Absent</button>
+                  </form>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

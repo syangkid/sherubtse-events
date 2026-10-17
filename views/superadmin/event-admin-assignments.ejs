@@ -1,0 +1,70 @@
+<%- include('../partials/header', { title: 'Event Admin Assignments' }) %>
+
+<h1 class="dashboard-title">Event Admin Assignments</h1>
+
+<section class="dashboard-section">
+  <h2>Assign an Event Admin</h2>
+  <p class="form-hint">
+    An Event Admin can manage <strong>only the event they are assigned to</strong>.
+    The user keeps their normal role.
+  </p>
+
+  <form method="POST" action="/superadmin/event-admin-assignments" class="filter-bar">
+    <div class="form-group">
+      <label for="event_id">Event</label>
+      <select class="form-control" id="event_id" name="event_id" required>
+        <option value="">Choose an event</option>
+        <% events.forEach((e) => { %>
+          <option value="<%= e.id %>"><%= e.title %> (<%= formatDate(e.eventDate) %>, <%= e.status %>)</option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="user_id">User</label>
+      <select class="form-control" id="user_id" name="user_id" required>
+        <option value="">Choose a user</option>
+        <% users.forEach((u) => { %>
+          <option value="<%= u.id %>"><%= u.fullName %> - <%= u.email %> (<%= roleLabel(u.role) %>)</option>
+        <% }) %>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn--primary">Assign</button>
+  </form>
+</section>
+
+<section class="dashboard-section">
+  <h2>Current assignments</h2>
+
+  <% if (assignments.length === 0) { %>
+    <p class="empty-state">No Event Admins are assigned yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Event</th><th>Event Admin</th><th>Assigned by</th><th>Assigned on</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <% assignments.forEach((a) => { %>
+            <tr>
+              <td><%= a.eventTitle %><br><span class="form-hint"><%= formatDate(a.eventDate) %></span></td>
+              <td><%= a.userName %><br><span class="form-hint"><%= a.userEmail %></span></td>
+              <td><%= a.assignedByName || '-' %></td>
+              <td><%= formatDate(a.assignedAt) %></td>
+              <td>
+                <form class="inline-form" method="POST"
+                      action="/superadmin/event-admin-assignments/<%= a.id %>/remove"
+                      onsubmit="return confirm('Remove this Event Admin assignment?');">
+                  <button type="submit" class="btn btn--small btn--danger">Remove</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

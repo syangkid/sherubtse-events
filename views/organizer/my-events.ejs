@@ -1,0 +1,38 @@
+<%- include('../partials/header', { title: 'My Events' }) %>
+
+<h1 class="dashboard-title">My Events</h1>
+
+<p class="page-actions">
+  <a class="btn btn--primary" href="/organizer/create-event">Create event</a>
+</p>
+
+<section class="dashboard-section">
+  <% if (events.length === 0) { %>
+    <p class="empty-state">You have not created any events yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Title</th><th>Date</th><th>Venue</th><th>Status</th><th>Registered</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <% events.forEach((e) => { %>
+            <tr>
+              <td><%= e.title %></td>
+              <td><%= formatDate(e.eventDate) %></td>
+              <td><%= e.venueName || '-' %></td>
+              <td><span class="badge badge--<%= e.status %>"><%= e.status %></span></td>
+              <td><%= e.registeredCount %> / <%= e.capacity %></td>
+                <td>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= e.id %>/edit">Edit</a>
+    <a class="btn btn--small btn--outline" href="/manage/events/<%= e.id %>/participants">Participants</a>
+  </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

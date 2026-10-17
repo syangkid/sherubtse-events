@@ -1,0 +1,67 @@
+<%
+  const errors = locals.errors || {};
+  const values = locals.values || {};
+  const statusList = locals.statuses || ['draft', 'published'];
+%>
+<form method="POST" action="<%= action %>" novalidate>
+
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input class="form-control" type="text" id="title" name="title" maxlength="200"
+           value="<%= values.title || '' %>" required>
+    <% if (errors.title) { %><p class="field-error"><%= errors.title.msg %></p><% } %>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="4"
+              maxlength="2000"><%= values.description || '' %></textarea>
+    <% if (errors.description) { %><p class="field-error"><%= errors.description.msg %></p><% } %>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="event_date">Event date</label>
+      <input class="form-control" type="date" id="event_date" name="event_date"
+             value="<%= formatDateInput(values.event_date) %>" required>
+      <% if (errors.event_date) { %><p class="field-error"><%= errors.event_date.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="capacity">Capacity</label>
+      <input class="form-control" type="number" id="capacity" name="capacity" min="1"
+             value="<%= values.capacity || '' %>" required>
+      <% if (errors.capacity) { %><p class="field-error"><%= errors.capacity.msg %></p><% } %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="venue_id">Venue</label>
+      <select class="form-control" id="venue_id" name="venue_id" required>
+        <option value="">Choose a venue</option>
+        <% venues.forEach((v) => { %>
+          <option value="<%= v.id %>" <%= String(values.venue_id) === String(v.id) ? 'selected' : '' %>>
+            <%= v.name %> (capacity <%= v.capacity %>)
+          </option>
+        <% }) %>
+      </select>
+      <% if (errors.venue_id) { %><p class="field-error"><%= errors.venue_id.msg %></p><% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select class="form-control" id="status" name="status" required>
+        <% statusList.forEach((s) => { %>
+          <option value="<%= s %>" <%= values.status === s ? 'selected' : '' %>>
+            <%= s.charAt(0).toUpperCase() + s.slice(1) %>
+          </option>
+        <% }) %>
+      </select>
+      <p class="form-hint">Draft events are visible only to you and the Super Admin.</p>
+      <% if (errors.status) { %><p class="field-error"><%= errors.status.msg %></p><% } %>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn--primary"><%= submitLabel %></button>
+</form>

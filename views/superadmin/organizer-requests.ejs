@@ -1,0 +1,63 @@
+<%- include('../partials/header', { title: 'Organizer Requests' }) %>
+
+<h1 class="dashboard-title">Organizer Requests</h1>
+
+<nav class="tab-list" aria-label="Filter requests">
+  <% ['pending', 'approved', 'rejected', 'all'].forEach((s) => { %>
+    <a class="<%= filter === s ? 'is-active' : '' %>" href="/superadmin/organizer-requests?status=<%= s %>">
+      <%= s.charAt(0).toUpperCase() + s.slice(1) %>
+    </a>
+  <% }) %>
+</nav>
+
+<section class="dashboard-section">
+  <% if (requests.length === 0) { %>
+    <p class="empty-state">No <%= filter === 'all' ? '' : filter %> requests.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Applicant</th><th>Reason</th><th>Status</th><th>Submitted</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% requests.forEach((r) => { %>
+            <tr>
+              <td>
+                <strong><%= r.fullName %></strong><br>
+                <span class="form-hint"><%= r.email %></span>
+              </td>
+              <td class="reason-text"><%= r.reason %></td>
+              <td>
+                <span class="badge badge--<%= r.status %>"><%= r.status %></span>
+                <% if (r.reviewedAt) { %>
+                  <br><span class="form-hint"><%= formatDate(r.reviewedAt) %><%= r.reviewedByName ? ' by ' + r.reviewedByName : '' %></span>
+                <% } %>
+              </td>
+              <td><%= formatDate(r.createdAt) %></td>
+              <td>
+                <% if (r.status === 'pending') { %>
+                  <form class="inline-form" method="POST"
+                        action="/superadmin/organizer-requests/<%= r.id %>/approve"
+                        onsubmit="return confirm('Approve this request? The user will become an Organizer.');">
+                    <button type="submit" class="btn btn--small btn--success">Approve</button>
+                  </form>
+                  <form class="inline-form" method="POST"
+                        action="/superadmin/organizer-requests/<%= r.id %>/reject"
+                        onsubmit="return confirm('Reject this request?');">
+                    <button type="submit" class="btn btn--small btn--danger">Reject</button>
+                  </form>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

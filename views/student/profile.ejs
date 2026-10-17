@@ -1,0 +1,25 @@
+<%- include('../partials/header', { title: 'My Profile' }) %>
+
+<h1 class="dashboard-title">My Profile</h1>
+
+<section class="dashboard-section">
+  <dl class="detail-list">
+    <dt>Full name</dt>
+    <dd><%= currentUser.fullName %></dd>
+    <dt>Email</dt>
+    <dd><%= currentUser.email %></dd>
+    <dt>Student ID</dt>
+    <dd><%= currentUser.studentIdNo || '-' %></dd>
+    <dt>Phone</dt>
+    <dd><%= currentUser.phone || '-' %></dd>
+    <dt>Role</dt>
+    <dd><%= roleLabel(currentUser.role) %></dd>
+    <dt>Event Admin</dt>
+    <dd><%= currentUser.isEventAdmin ? 'Yes, for one or more specific events' : 'No' %></dd>
+    <dt>Member since</dt>
+    <dd><%= formatDate(currentUser.createdAt) %></dd>
+  </dl>
+  <p><a class="btn btn--outline" href="/student/organizer-request">Request Organizer Role</a></p>
+</section>
+
+<%- include('../partials/footer') %>

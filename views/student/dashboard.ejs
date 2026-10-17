@@ -1,0 +1,55 @@
+<%- include('../partials/header', { title: 'Student Dashboard' }) %>
+
+<h1 class="dashboard-title">Student Dashboard</h1>
+<p class="form-hint">Welcome, <%= currentUser.fullName %>.</p>
+
+<section class="stat-grid" aria-label="Your statistics">
+  <div class="stat-card">
+    <p class="stat-card__label">Available Events</p>
+    <p class="stat-card__value"><%= stats.availableEvents %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">My Registrations</p>
+    <p class="stat-card__value"><%= stats.myRegistrations %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Upcoming Registered</p>
+    <p class="stat-card__value"><%= stats.upcomingRegistered %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Events Attended</p>
+    <p class="stat-card__value"><%= stats.attended %></p>
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h2>Your upcoming events</h2>
+  <% if (upcoming.length === 0) { %>
+    <p class="empty-state">You are not registered for any upcoming events.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Event</th><th>Date</th><th>Venue</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <% upcoming.forEach((r) => { %>
+            <tr>
+              <td><%= r.eventTitle %></td>
+              <td><%= formatDate(r.eventDate) %></td>
+              <td><%= r.venueName || '-' %></td>
+              <td><a class="btn btn--small btn--outline" href="/events/<%= r.eventId %>">View</a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+  <p>
+    <a class="btn btn--primary" href="/events">Browse events</a>
+    <a class="btn btn--outline" href="/student/my-registrations">All my registrations</a>
+    <a class="btn btn--outline" href="/student/organizer-request">Request Organizer Role</a>
+  </p>
+</section>
+
+<%- include('../partials/footer') %>

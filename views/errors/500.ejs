@@ -1,0 +1,13 @@
+<%- include('../partials/header', { title: 'Server error' }) %>
+
+<section class="error-page">
+  <p class="error-page__code">500</p>
+  <h1>Something went wrong</h1>
+  <p>An unexpected error occurred on the server. Please try again later.</p>
+  <% if (locals.message && locals.message !== 'Internal server error') { %>
+    <p class="error-page__detail"><%= locals.message %></p>
+  <% } %>
+  <a class="btn btn--primary" href="/">Back to Home</a>
+</section>
+
+<%- include('../partials/footer') %>

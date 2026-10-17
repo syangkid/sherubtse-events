@@ -1,0 +1,31 @@
+<%- include('partials/header', { title: 'Notifications' }) %>
+
+<h1 class="dashboard-title">Notifications</h1>
+
+<section class="dashboard-section">
+  <% if (notifications.length === 0) { %>
+    <p class="empty-state">You have no notifications.</p>
+  <% } else { %>
+    <form method="POST" action="/notifications/read-all" class="page-actions">
+      <button type="submit" class="btn btn--small btn--outline">Mark all as read</button>
+    </form>
+
+    <ul class="notification-list">
+      <% notifications.forEach((n) => { %>
+        <li class="notification <%= n.status === 'unread' ? 'is-unread' : '' %>">
+          <div>
+            <p class="notification__message"><%= n.message %></p>
+            <p class="form-hint"><%= formatDate(n.createdAt) %>, <%= formatTime(n.createdAt) %></p>
+          </div>
+          <% if (n.status === 'unread') { %>
+            <form method="POST" action="/notifications/<%= n.id %>/read">
+              <button type="submit" class="btn btn--small btn--outline">Mark read</button>
+            </form>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,59 @@
+<%- include('../partials/header', { title: 'Super Admin Dashboard' }) %>
+
+<h1 class="dashboard-title">Super Admin Dashboard</h1>
+
+<section class="stat-grid" aria-label="System statistics">
+  <div class="stat-card">
+    <p class="stat-card__label">Total Users</p>
+    <p class="stat-card__value"><%= stats.totalUsers %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Total Events</p>
+    <p class="stat-card__value"><%= stats.totalEvents %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Pending Requests</p>
+    <p class="stat-card__value"><%= stats.pendingRequests %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Upcoming Events</p>
+    <p class="stat-card__value"><%= stats.upcomingEvents %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Active Registrations</p>
+    <p class="stat-card__value"><%= stats.activeRegistrations %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Attendance Records</p>
+    <p class="stat-card__value"><%= stats.attendanceRecords %></p>
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h2>Recent Organizer Requests</h2>
+
+  <% if (recentRequests.length === 0) { %>
+    <p class="empty-state">No organizer requests yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Status</th><th>Submitted</th></tr>
+        </thead>
+        <tbody>
+          <% recentRequests.forEach((r) => { %>
+            <tr>
+              <td><%= r.fullName %></td>
+              <td><%= r.email %></td>
+              <td><span class="badge badge--<%= r.status %>"><%= r.status %></span></td>
+              <td><%= formatDate(r.createdAt) %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <p><a class="btn btn--outline" href="/superadmin/organizer-requests">Review requests</a></p>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

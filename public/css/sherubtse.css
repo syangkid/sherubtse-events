@@ -1,0 +1,33 @@
+:root {
+  /*Brand colors */
+  --primary-color: #1f3a5f;      
+  --primary-dark: #14263f;      
+  --secondary-color: #8a6d1d;  
+  --accent-color: #b8860b;      
+
+  /*Text and backgrounds */
+  --text-color: #1f2933;
+  --text-muted: #52606d;
+  --background-color: #f5f7fa;
+  --surface-color: #ffffff;
+  --border-color: #d9e0e7;
+
+  /*Status colors ---- */
+  --success-color: #1b7a43;
+  --warning-color: #a56a00;
+  --danger-color: #b3261e;
+  --info-color: #1d5fa8;
+
+  /*Typography*/
+  --font-body: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --font-heading: Georgia, "Times New Roman", serif;
+
+  /*Layout*/
+  --container-width: 1140px;
+  --radius: 6px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+}

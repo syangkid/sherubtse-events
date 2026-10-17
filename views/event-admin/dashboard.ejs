@@ -1,0 +1,56 @@
+<%- include('../partials/header', { title: 'Event Admin Dashboard' }) %>
+
+<h1 class="dashboard-title">Event Admin Dashboard</h1>
+<p class="form-hint">You can run only the events listed here. Your normal role does not change.</p>
+
+<section class="stat-grid" aria-label="Your statistics">
+  <div class="stat-card">
+    <p class="stat-card__label">Assigned Events</p>
+    <p class="stat-card__value"><%= stats.assignedEvents %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Participants</p>
+    <p class="stat-card__value"><%= stats.participants %></p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card__label">Attendance Marked</p>
+    <p class="stat-card__value"><%= stats.attendanceMarked %></p>
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h2>Assigned events</h2>
+  <% if (events.length === 0) { %>
+    <p class="empty-state">No events are assigned to you.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Event</th><th>Date</th><th>Venue</th><th>Status</th>
+            <th>Registered</th><th>Attendance marked</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% events.forEach((e) => { %>
+            <tr>
+              <td><a href="/events/<%= e.id %>"><%= e.title %></a></td>
+              <td><%= formatDate(e.eventDate) %></td>
+              <td><%= e.venueName || '-' %></td>
+              <td><span class="badge badge--<%= e.status %>"><%= e.status %></span></td>
+              <td><%= e.registeredCount %></td>
+              <td><%= e.markedCount %> / <%= e.registeredCount %></td>
+              <td>
+                <a class="btn btn--small btn--primary" href="/manage/events/<%= e.id %>/participants">
+                  Participants &amp; attendance
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

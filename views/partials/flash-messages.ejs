@@ -1,0 +1,9 @@
+<%# Shows a one-time message such as "Registered successfully".
+    Controllers will set res.locals.flash = { type: 'success' | 'error' | 'info', message: '...' } %>
+<% if (locals.flash && locals.flash.message) { %>
+  <div class="container">
+    <div class="alert alert--<%= locals.flash.type || 'info' %>" role="alert">
+      <%= locals.flash.message %>
+    </div>
+  </div>
+<% } %>

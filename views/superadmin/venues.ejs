@@ -1,0 +1,41 @@
+<%- include('../partials/header', { title: 'Venues' }) %>
+
+<h1 class="dashboard-title">Venues</h1>
+
+<p class="page-actions">
+  <a class="btn btn--primary" href="/superadmin/venues/new">Add venue</a>
+</p>
+
+<section class="dashboard-section">
+  <% if (venues.length === 0) { %>
+    <p class="empty-state">No venues yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Location</th><th>Capacity</th><th>Events</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <% venues.forEach((v) => { %>
+            <tr>
+              <td><strong><%= v.name %></strong><br><span class="form-hint"><%= v.description || '' %></span></td>
+              <td><%= v.location %></td>
+              <td><%= v.capacity %></td>
+              <td><%= v.eventCount %></td>
+              <td>
+                <a class="btn btn--small btn--outline" href="/superadmin/venues/<%= v.id %>/edit">Edit</a>
+                <form class="inline-form" method="POST"
+                      action="/superadmin/venues/<%= v.id %>/delete"
+                      onsubmit="return confirm('Delete this venue?');">
+                  <button type="submit" class="btn btn--small btn--danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

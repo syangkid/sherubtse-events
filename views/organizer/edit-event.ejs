@@ -1,0 +1,98 @@
+<%- include('../partials/header', { title: 'Edit Event' }) %>
+<%
+  const backPath = currentUser.role === 'super_admin' ? '/superadmin/events' : '/organizer/my-events';
+  const sErrors = locals.scheduleErrors || {};
+  const sValues = locals.scheduleValues || {};
+%>
+
+<p class="page-actions"><a href="<%= backPath %>">&larr; Back to events</a></p>
+
+<h1 class="dashboard-title">Edit event: <%= event.title %></h1>
+<p class="form-hint">
+  Organizer: <strong><%= event.organizerName %></strong> |
+  Registered: <strong><%= event.registeredCount %> / <%= event.capacity %></strong> |
+  Current status: <span class="badge badge--<%= event.status %>"><%= event.status %></span>
+</p>
+
+<section class="dashboard-section">
+  <h2>Event details</h2>
+  <%- include('../partials/event-form', {
+        action: '/manage/events/' + event.id + '/edit',
+        values: values,
+        errors: errors,
+        venues: venues,
+        statuses: statuses,
+        submitLabel: 'Save changes'
+      }) %>
+</section>
+
+<section class="dashboard-section">
+  <h2>Schedule</h2>
+  <p class="form-hint">Slots take place on the event date (<%= formatDate(event.eventDate) %>). If you move the event, the slots move with it.</p>
+
+  <% if (schedules.length === 0) { %>
+    <p class="empty-state">No schedule slots yet.</p>
+  <% } else { %>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Start</th><th>End</th><th>Description</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <% schedules.forEach((s) => { %>
+            <tr>
+              <td><%= formatTime(s.startTime) %></td>
+              <td><%= formatTime(s.endTime) %></td>
+              <td><%= s.description %></td>
+              <td>
+                <form class="inline-form" method="POST"
+                      action="/manage/events/<%= event.id %>/schedules/<%= s.id %>/delete"
+                      onsubmit="return confirm('Remove this schedule slot?');">
+                  <button type="submit" class="btn btn--small btn--danger">Remove</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+
+  <h3>Add a slot</h3>
+  <form method="POST" action="/manage/events/<%= event.id %>/schedules" novalidate>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="start_time">Start time</label>
+        <input class="form-control" type="time" id="start_time" name="start_time"
+               value="<%= sValues.start_time || '' %>" required>
+        <% if (sErrors.start_time) { %><p class="field-error"><%= sErrors.start_time.msg %></p><% } %>
+      </div>
+      <div class="form-group">
+        <label for="end_time">End time</label>
+        <input class="form-control" type="time" id="end_time" name="end_time"
+               value="<%= sValues.end_time || '' %>" required>
+        <% if (sErrors.end_time) { %><p class="field-error"><%= sErrors.end_time.msg %></p><% } %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="schedule_description">Description</label>
+      <input class="form-control" type="text" id="schedule_description" name="description"
+             maxlength="255" value="<%= sValues.description || '' %>" required>
+      <% if (sErrors.description) { %><p class="field-error"><%= sErrors.description.msg %></p><% } %>
+    </div>
+    <button type="submit" class="btn btn--outline">Add slot</button>
+  </form>
+</section>
+
+<section class="dashboard-section danger-zone">
+  <h2>Delete this event</h2>
+  <p class="form-hint">
+    Only possible while the event has no registrations. Otherwise set its status to Cancelled.
+  </p>
+  <form method="POST" action="/manage/events/<%= event.id %>/delete"
+        onsubmit="return confirm('Delete this event permanently?');">
+    <button type="submit" class="btn btn--danger">Delete event</button>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>
