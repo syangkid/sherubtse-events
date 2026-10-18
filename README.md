@@ -1,3 +1,4 @@
+```text
 sherubtse-events/
 ├── config/
 │   ├── db.js
@@ -125,3 +126,4 @@ sherubtse-events/
 ├── package-lock.json
 ├── package.json
 └── README.md
+```
