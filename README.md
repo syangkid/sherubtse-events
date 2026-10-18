@@ -100,6 +100,7 @@ sherubtse-events/
 │       └── sherubtse-logo.png
 ├── database/
 │   ├── createTestDb.js
+│   ├── createSuperAdmin.js
 │   ├── run.js
 │   ├── schema.sql
 │   ├── seed.sql
