@@ -8,7 +8,9 @@ function registerListeners() {
   require('./listeners/attendanceListener').register();
   require('./listeners/organizerListener').register();
 
-  console.log('Event listeners registered: RegistrationCreated, AttendanceRecorded, OrganizerRequestCreated');
+    if (process.env.NODE_ENV !== 'test') {
+    console.log('Event listeners registered: RegistrationCreated, AttendanceRecorded, OrganizerRequestCreated');
+  }
 }
 
 module.exports = { registerListeners };

@@ -133,21 +133,21 @@ INSERT INTO events (title, description, event_date, capacity, organizer_id, venu
 SELECT v.title, v.description, CURRENT_DATE + v.days_from_now, v.capacity,
        u.id, ve.id, v.status
 FROM (VALUES
-  ('Hackathon 2026',
+  ('Sherubtse Innovation Hackathon',
    'A 24-hour coding challenge for student teams.',
-   14, 40, 'organizer1@demo.test', 'ITLT', 'published'),
-  ('Cultural Night',
+   14, 40, 'srai444@gmail.com', 'ITLT', 'published'),
+  ('Sherubtse Cultural Night',
    'An evening of music, dance, and performances.',
-   30, 300, 'organizer2@demo.test', 'Auditorium', 'published'),
+   30, 300, 'otdorji55@gmail.com', 'Auditorium', 'published'),
   ('Inter-Class Football Tournament',
    'Knockout football tournament between classes.',
-   7, 100, 'organizer1@demo.test', 'MPH', 'published'),
+   7, 100, 'srai444@gmail.com', 'MPH', 'published'),
   ('Career Talk Series',
    'Guest speakers talk about careers after graduation.',
-   -10, 80, 'organizer2@demo.test', 'New LT', 'completed'),
+   -10, 80, 'otdorji55@gmail.com', 'New LT', 'completed'),
   ('Photography Workshop',
    'Hands-on introduction to photography (not yet published).',
-   45, 25, 'organizer1@demo.test', 'Seminar Hall', 'draft')
+   45, 25, 'srai444@gmail.com', 'Seminar Hall', 'draft')
 ) AS v(title, description, days_from_now, capacity, organizer_email, venue_name, status)
 JOIN users  u  ON u.email  = v.organizer_email
 JOIN venues ve ON ve.name  = v.venue_name;

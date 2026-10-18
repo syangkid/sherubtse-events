@@ -1,0 +1,2428 @@
+{
+  "info": {
+    "name": "Sherubtse College Event Management System API",
+    "description": "Run on a freshly seeded database (npm run db:reset). Run the whole collection in order with the Collection Runner.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Public (no login)",
+      "item": [
+        {
+          "name": "Health check",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const run = Date.now();",
+                  "pm.collectionVariables.set(\"runId\", run);",
+                  "pm.collectionVariables.set(\"newEmail\", \"collection.\" + run + \"@example.test\");",
+                  "pm.collectionVariables.set(\"futureDate\", new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Health check: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Health check: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/health"
+            }
+          }
+        },
+        {
+          "name": "API root lists endpoints",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"API root lists endpoints: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"API root lists endpoints: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api"
+            }
+          }
+        },
+        {
+          "name": "List events",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"List events: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"List events: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events"
+            }
+          }
+        },
+        {
+          "name": "Search events (hack)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Search events (hack): status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Search events (hack): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events?search=hack"
+            }
+          }
+        },
+        {
+          "name": "Get event 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Get event 1: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Get event 1: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1"
+            }
+          }
+        },
+        {
+          "name": "Draft event is hidden (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Draft event is hidden (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Draft event is hidden (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/5"
+            }
+          }
+        },
+        {
+          "name": "Event 1 schedule",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Event 1 schedule: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Event 1 schedule: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/schedules"
+            }
+          }
+        },
+        {
+          "name": "Venues need login (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Venues need login (401): status 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"Venues need login (401): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Authentication",
+      "item": [
+        {
+          "name": "Register new student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register new student: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Register new student: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"full_name\":\"Collection Tester\",\"email\":\"{{newEmail}}\",\"password\":\"Test@12345\"}"
+            }
+          }
+        },
+        {
+          "name": "Register same email again (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register same email again (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Register same email again (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"full_name\":\"Collection Tester\",\"email\":\"{{newEmail}}\",\"password\":\"Test@12345\"}"
+            }
+          }
+        },
+        {
+          "name": "Register with weak password (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register with weak password (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Register with weak password (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"full_name\":\"Weak Pw\",\"email\":\"weak.{{runId}}@example.test\",\"password\":\"abc\"}"
+            }
+          }
+        },
+        {
+          "name": "Login with wrong password (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login with wrong password (401): status 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"Login with wrong password (401): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{newEmail}}\",\"password\":\"Wrong@1234\"}"
+            }
+          }
+        },
+        {
+          "name": "Me while logged out (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Me while logged out (401): status 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"Me while logged out (401): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Student",
+      "item": [
+        {
+          "name": "Login as the new student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login as the new student: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Login as the new student: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{newEmail}}\",\"password\":\"Test@12345\"}"
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Me: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Me: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me"
+            }
+          }
+        },
+        {
+          "name": "Student cannot create events (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Student cannot create events (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Student cannot create events (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Nope\",\"event_date\":\"{{futureDate}}\",\"capacity\":10,\"venue_id\":3,\"status\":\"draft\"}"
+            }
+          }
+        },
+        {
+          "name": "Student cannot see participants (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Student cannot see participants (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Student cannot see participants (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/participants"
+            }
+          }
+        },
+        {
+          "name": "Organizer request too short (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Organizer request too short (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Organizer request too short (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reason\":\"short\"}"
+            }
+          }
+        },
+        {
+          "name": "Submit organizer request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Submit organizer request: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Submit organizer request: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });",
+                  "try { const j = pm.response.json(); pm.collectionVariables.set(\"requestId\", j.data.requestId); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reason\":\"I want to run workshops for my department.\"}"
+            }
+          }
+        },
+        {
+          "name": "Second pending request (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Second pending request (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Second pending request (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reason\":\"I want to run workshops for my department.\"}"
+            }
+          }
+        },
+        {
+          "name": "Student cannot list requests (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Student cannot list requests (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Student cannot list requests (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests"
+            }
+          }
+        },
+        {
+          "name": "Register for event 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register for event 3: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Register for event 3: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/3/register"
+            }
+          }
+        },
+        {
+          "name": "Register again (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register again (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Register again (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/3/register"
+            }
+          }
+        },
+        {
+          "name": "Register for draft event (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register for draft event (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Register for draft event (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/5/register"
+            }
+          }
+        },
+        {
+          "name": "Register for completed event (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Register for completed event (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Register for completed event (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/4/register"
+            }
+          }
+        },
+        {
+          "name": "My registrations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"My registrations: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"My registrations: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/registrations/me"
+            }
+          }
+        },
+        {
+          "name": "My notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"My notifications: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"My notifications: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications"
+            }
+          }
+        },
+        {
+          "name": "Cancel registration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cancel registration: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Cancel registration: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/3/register"
+            }
+          }
+        },
+        {
+          "name": "Cancel again (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cancel again (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Cancel again (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/3/register"
+            }
+          }
+        },
+        {
+          "name": "Cancel never-registered event (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cancel never-registered event (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Cancel never-registered event (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/2/register"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Logout: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Logout: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout"
+            }
+          }
+        },
+        {
+          "name": "Me after logout (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Me after logout (401): status 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"Me after logout (401): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Organizer (organizer1)",
+      "item": [
+        {
+          "name": "Login as organizer1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login as organizer1: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Login as organizer1: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"organizer1@demo.test\",\"password\":\"Demo@12345\"}"
+            }
+          }
+        },
+        {
+          "name": "Create event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Create event: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Create event: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });",
+                  "try { const j = pm.response.json(); pm.collectionVariables.set(\"eventId\", j.data.event.id); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Collection Test Event\",\"description\":\"Created by Postman\",\"event_date\":\"{{futureDate}}\",\"capacity\":30,\"venue_id\":3,\"status\":\"published\"}"
+            }
+          }
+        },
+        {
+          "name": "Create event in the past (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Create event in the past (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Create event in the past (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Old Event\",\"event_date\":\"2020-01-01\",\"capacity\":10,\"venue_id\":3,\"status\":\"draft\"}"
+            }
+          }
+        },
+        {
+          "name": "Capacity above venue capacity (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Capacity above venue capacity (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Capacity above venue capacity (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Too Big\",\"event_date\":\"{{futureDate}}\",\"capacity\":500,\"venue_id\":3,\"status\":\"draft\"}"
+            }
+          }
+        },
+        {
+          "name": "Update own event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Update own event: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Update own event: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Collection Test Event (edited)\",\"description\":\"Edited\",\"event_date\":\"{{futureDate}}\",\"capacity\":30,\"venue_id\":3,\"status\":\"published\"}"
+            }
+          }
+        },
+        {
+          "name": "Update someone else's event (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Update someone else's event (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Update someone else's event (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/2"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Collection Test Event\",\"description\":\"Created by Postman\",\"event_date\":\"{{futureDate}}\",\"capacity\":30,\"venue_id\":3,\"status\":\"published\"}"
+            }
+          }
+        },
+        {
+          "name": "Add schedule slot",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Add schedule slot: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Add schedule slot: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });",
+                  "try { const j = pm.response.json(); pm.collectionVariables.set(\"scheduleId\", j.data.schedule.id); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}/schedules"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"start_time\":\"09:00\",\"end_time\":\"10:30\",\"description\":\"Opening session\"}"
+            }
+          }
+        },
+        {
+          "name": "Schedule end before start (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Schedule end before start (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Schedule end before start (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}/schedules"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"start_time\":\"10:00\",\"end_time\":\"09:00\",\"description\":\"Backwards\"}"
+            }
+          }
+        },
+        {
+          "name": "List schedule",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"List schedule: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"List schedule: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}/schedules"
+            }
+          }
+        },
+        {
+          "name": "Remove schedule slot",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Remove schedule slot: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Remove schedule slot: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}/schedules/{{scheduleId}}"
+            }
+          }
+        },
+        {
+          "name": "Add slot to someone else's event (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Add slot to someone else's event (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Add slot to someone else's event (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/2/schedules"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"start_time\":\"09:00\",\"end_time\":\"10:00\",\"description\":\"Nope\"}"
+            }
+          }
+        },
+        {
+          "name": "Own events only (?mine=true)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Own events only (?mine=true): status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Own events only (?mine=true): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events?mine=true"
+            }
+          }
+        },
+        {
+          "name": "Delete event with registrations (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Delete event with registrations (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Delete event with registrations (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1"
+            }
+          }
+        },
+        {
+          "name": "Participants of own event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Participants of own event: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Participants of own event: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });",
+                  "try { const j = pm.response.json(); pm.collectionVariables.set(\"regId\", j.data.participants[0].registrationId); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/participants"
+            }
+          }
+        },
+        {
+          "name": "Participants of someone else's event (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Participants of someone else's event (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Participants of someone else's event (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/2/participants"
+            }
+          }
+        },
+        {
+          "name": "Attendance before event date (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Attendance before event date (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Attendance before event date (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\":1,\"registration_id\":{{regId}},\"status\":\"present\"}"
+            }
+          }
+        },
+        {
+          "name": "Attendance with bad status (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Attendance with bad status (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Attendance with bad status (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\":1,\"registration_id\":{{regId}},\"status\":\"late\"}"
+            }
+          }
+        },
+        {
+          "name": "Organizer cannot create venues (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Organizer cannot create venues (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Organizer cannot create venues (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Nope\",\"location\":\"Nope\",\"capacity\":10}"
+            }
+          }
+        },
+        {
+          "name": "List venues",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"List venues: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"List venues: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues"
+            }
+          }
+        },
+        {
+          "name": "Delete own new event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Delete own new event: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Delete own new event: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}"
+            }
+          }
+        },
+        {
+          "name": "Delete it again (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Delete it again (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Delete it again (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Logout: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Logout: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Event Admin (student3, assigned to Hackathon only)",
+      "item": [
+        {
+          "name": "Login as student3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login as student3: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Login as student3: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"student3@demo.test\",\"password\":\"Demo@12345\"}"
+            }
+          }
+        },
+        {
+          "name": "Participants of assigned event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Participants of assigned event: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Participants of assigned event: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/participants"
+            }
+          }
+        },
+        {
+          "name": "Attendance list of assigned event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Attendance list of assigned event: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Attendance list of assigned event: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/attendance"
+            }
+          }
+        },
+        {
+          "name": "Participants of another event (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Participants of another event (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Participants of another event (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/2/participants"
+            }
+          }
+        },
+        {
+          "name": "Cannot edit event details (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cannot edit event details (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Cannot edit event details (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Collection Test Event\",\"description\":\"Created by Postman\",\"event_date\":\"{{futureDate}}\",\"capacity\":30,\"venue_id\":3,\"status\":\"published\"}"
+            }
+          }
+        },
+        {
+          "name": "Mark attendance before event date (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Mark attendance before event date (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Mark attendance before event date (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\":1,\"registration_id\":{{regId}},\"status\":\"present\"}"
+            }
+          }
+        },
+        {
+          "name": "Mark attendance for another event (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Mark attendance for another event (403): status 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"Mark attendance for another event (403): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/attendance"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\":2,\"registration_id\":{{regId}},\"status\":\"present\"}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Logout: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Logout: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Super Admin",
+      "item": [
+        {
+          "name": "Login as Super Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login as Super Admin: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Login as Super Admin: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"superadmin@demo.test\",\"password\":\"Demo@12345\"}"
+            }
+          }
+        },
+        {
+          "name": "Find Student One",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Find Student One: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Find Student One: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });",
+                  "try { const j = pm.response.json(); pm.collectionVariables.set(\"studentId\", j.data.users[0].id); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?search=student1@demo.test"
+            }
+          }
+        },
+        {
+          "name": "List all users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"List all users: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"List all users: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users"
+            }
+          }
+        },
+        {
+          "name": "List pending organizer requests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"List pending organizer requests: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"List pending organizer requests: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests?status=pending"
+            }
+          }
+        },
+        {
+          "name": "Approve the collection tester",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Approve the collection tester: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Approve the collection tester: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests/{{requestId}}/approve"
+            }
+          }
+        },
+        {
+          "name": "Approve again (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Approve again (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Approve again (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests/{{requestId}}/approve"
+            }
+          }
+        },
+        {
+          "name": "Reject unknown request (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Reject unknown request (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Reject unknown request (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests/9999/reject"
+            }
+          }
+        },
+        {
+          "name": "Request id must be a number (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Request id must be a number (400): status 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Request id must be a number (400): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/organizer-requests/abc/approve"
+            }
+          }
+        },
+        {
+          "name": "Create venue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Create venue: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Create venue: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });",
+                  "try { const j = pm.response.json(); pm.collectionVariables.set(\"venueId\", j.data.venue.id); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Collection Hall {{runId}}\",\"location\":\"Demo\",\"capacity\":60}"
+            }
+          }
+        },
+        {
+          "name": "Duplicate venue name (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Duplicate venue name (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Duplicate venue name (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Collection Hall {{runId}}\",\"location\":\"Demo\",\"capacity\":60}"
+            }
+          }
+        },
+        {
+          "name": "Get venue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Get venue: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Get venue: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues/{{venueId}}"
+            }
+          }
+        },
+        {
+          "name": "Update venue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Update venue: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Update venue: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues/{{venueId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Collection Hall {{runId}}\",\"location\":\"Demo\",\"capacity\":80}"
+            }
+          }
+        },
+        {
+          "name": "Delete venue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Delete venue: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Delete venue: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues/{{venueId}}"
+            }
+          }
+        },
+        {
+          "name": "Get deleted venue (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Get deleted venue (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Get deleted venue (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/venues/{{venueId}}"
+            }
+          }
+        },
+        {
+          "name": "Assign Event Admin to event 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Assign Event Admin to event 1: status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Assign Event Admin to event 1: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/event-admin"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user_id\":{{studentId}}}"
+            }
+          }
+        },
+        {
+          "name": "Assign again (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Assign again (409): status 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Assign again (409): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/event-admin"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user_id\":{{studentId}}}"
+            }
+          }
+        },
+        {
+          "name": "Super Admin sees any event participants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Super Admin sees any event participants: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Super Admin sees any event participants: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/2/participants"
+            }
+          }
+        },
+        {
+          "name": "Remove Event Admin assignment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Remove Event Admin assignment: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Remove Event Admin assignment: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/event-admin/{{studentId}}"
+            }
+          }
+        },
+        {
+          "name": "Remove again (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Remove again (404): status 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Remove again (404): JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(false); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/1/event-admin/{{studentId}}"
+            }
+          }
+        },
+        {
+          "name": "Super Admin sees all events incl. drafts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Super Admin sees all events incl. drafts: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Super Admin sees all events incl. drafts: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/events"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Logout: status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Logout: JSON envelope\", function () { const j = pm.response.json(); pm.expect(j.success).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

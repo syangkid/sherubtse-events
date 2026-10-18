@@ -3,14 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {
+"scripts": {
   "start": "node app.js",
   "dev": "nodemon app.js",
+  "test": "node --test --test-concurrency=1 \"tests/*.test.js\"",
+  "test:unit": "node --test tests/unit.test.js",
+  "test:db": "node database/createTestDb.js",
   "db:test": "node database/testConnection.js",
   "db:schema": "node database/run.js schema",
   "db:seed": "node database/run.js seed",
   "db:reset": "npm run db:schema && npm run db:seed",
+  "db:admin": "node database/createSuperAdmin.js",
   "postman:build": "node tests/generatePostman.js"
+},
+"engines": {
+  "node": ">=20"
 },
   "keywords": [],
   "author": "",

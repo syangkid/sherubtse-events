@@ -11,7 +11,9 @@ const EVENTS = Object.freeze({
 
 function subscribe(eventName, handler) {
   eventBus.on(eventName, (payload) => {
-    console.log(`[event] ${eventName}`, JSON.stringify(payload));
+        if (process.env.NODE_ENV !== 'test') {
+      console.log(`[event] ${eventName}`, JSON.stringify(payload));
+    }
     Promise.resolve()
       .then(() => handler(payload))
       .catch((err) => {
