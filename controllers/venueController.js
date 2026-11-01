@@ -53,7 +53,7 @@ async function deleteVenue(id) {
     const deleted = await Venue.remove(id);
     if (!deleted) throw httpError(404, 'Venue not found.');
   } catch (err) {
-    if (err.code === '23503') {
+      if (err.code === '23503' || err.code === '23001') {
       throw httpError(409, 'This venue is used by one or more events and cannot be deleted.');
     }
     throw err;
